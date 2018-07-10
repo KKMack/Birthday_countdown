@@ -3,6 +3,8 @@ import React, { Component } from "react";
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 
+import 'react-datepicker/dist/react-datepicker.css';
+
 class Picker extends Component {
 
     constructor (props) {
@@ -14,7 +16,6 @@ class Picker extends Component {
     }
  
     handleChange(date) {
-        console.log('trying to change date')
         this.setState({
           startDate: date
         });
