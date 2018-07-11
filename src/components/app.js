@@ -28,7 +28,7 @@ export default class App extends Component {
 handleGenerate = function() {
   this.setState({ active: true })
 
-  var countDownDate = new Date('Sep 5, 2018 15: 37:25').getTime();
+  var countDownDate = this.state.startDate.toDate().getTime();
 
   var x = setInterval(function() {
 
