@@ -73,7 +73,7 @@ handleGenerate = function() {
 
     this.timer = setInterval(function() {
 
-    var now = today.getTime();
+    var now = moment().toDate().getTime();
 
     var distance = countDownDate - now;
 
@@ -101,8 +101,12 @@ handleGenerate = function() {
 getBirthDate = function(date) {
   const month = date.getMonth() + 1;
   const day = date.getDate();
-  if(month < 10) {
+  if(month < 10 && day > 10) {
   return `0${month}/${day}`
+  } else if (month < 10 && day < 10) {
+    return `0${month}/0${day}`
+  } else if (month > 10 && day < 10) {
+    return `${month}/0${day}`
   }
   return `${month}/${day}`
 }.bind(this);
@@ -110,16 +114,18 @@ getBirthDate = function(date) {
   renderItems = function() {
     if(this.state.active) {
       return [
-        <Clock timeRemaining={this.state.timeRemaining} />,
+        <Clock key={0} timeRemaining={this.state.timeRemaining} />,
         ChangeDate('Change Date', () => this.setState({ active: false })),
         LargeText(this.getBirthDate(this.state.startDate.toDate())),
-        <label className="grid__remaining">
+        <label key={3} className="grid__remaining">
         Remaining you turn {this.state.age}
         </label>
       ];
     } else {
         return [
-          <Picker startDate={this.state.startDate} callback={(date) => this.handleChange(date)}
+          <Picker startDate={this.state.startDate} 
+          callback={date => this.handleChange(date)}
+          key={0}
           />,
           Button('Generate Countdown', () => this.handleGenerate())
         ];
