@@ -24,23 +24,46 @@ export default class App extends Component {
         seconds: 0
       }
     }
+
+    this.handleGenerate = this.handleGenerate.bind(this);
   }
 
-  handleChange =function(date) {
-    console.log('APP JS HANDLE CHANGE', date._d);
+  handleChange = function(date) {
+    clearInterval(this.timer);
     this.setState({
       startDate: date
     });
 }.bind(this)
 
 handleGenerate = function() {
-  this.setState({ active: true })
+  this.setState({ active: true });
 
-    var countDownDate = this.state.startDate.toDate().getTime();
+  var bday = this.state.startDate.toDate();
+  var today = new Date();
+  var currentMonth = today.getMonth();
+  var birthMonth = bday.getMonth();
+
+  if(birthMonth > currentMonth) {
+    bday.setFullYear(today.getFullYear())
+  } else if (birthMonth < currentMonth) {
+    bday.setFullYear(today.getFullYear() + 1)
+  } else if(birthMonth == currentMonth) {
+    var currentDay = today.getDate();
+    var birthDay = bday.getDate()
+
+    if(birthDay > currentDay) {
+      bday.setFullYear(today.getFullYear())
+    }
+    if(birthDay < currentDay) {
+      bday.setFullYear(today.getFullYear() + 1)
+    }
+  }
+
+    var countDownDate = bday.getTime();
 
     this.timer = setInterval(function() {
 
-    var now = new Date().getTime();
+    var now = today.getTime();
 
     var distance = countDownDate - now;
 
@@ -60,14 +83,15 @@ handleGenerate = function() {
 
     if (distance < 0) {
       clearInterval(this.timer);
+      // document.getElementById("demo").innerHTML = "EXPIRED";
     }
   }.bind(this), 1000);
-}.bind(this)
+}.bind(this);
 
   renderItems = function() {
     if(this.state.active) {
       return [
-        <Clock timeRemaining={this.state.timeRemaining}/>,
+        <Clock timeRemaining={this.state.timeRemaining} />,
         ChangeDate('Change Date', () => this.setState({ active: false })),
         LargeText('04/03'),
         <label className="grid__remaining">Remaining until your 18th Birthday</label>
